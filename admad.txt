@@ -1,0 +1,76 @@
+import numpy as np
+
+
+def Adaline(Input, Target, lr=0.1):
+	weight = np.random.random(Input.shape[1])
+	bias = 0.1
+	error=[]
+	for i in range(Input.shape[0]):
+		Y_input = sum(weight*Input[i]) + bias
+		for j in range(Input.shape[1]):
+			weight[j]=weight[j] + lr*(Target[i]-Y_input)*Input[i][j]
+
+		bias=bias + lr*(Target[i]-Y_input)
+		error.append((Target[i]-Y_input)**2)	
+			
+	return weight, bias,error
+
+
+x = np.array([[1.0, 1.0],
+			[1.0, -1.0],
+			[-1.0, 1.0],
+			[-1.0, -1.0]])
+
+t = np.array([1, 1, 1, -1])
+print(f"Input:\n{x}")
+print(f"\nOutput: {t}")
+
+w,b,e = Adaline(x, t, lr=0.1)
+print('weight :',w)
+print('Bias :',b)
+print('error :',e)
+
+
+
+
+
+
+
+import numpy as np
+def activation(z):
+    if z>=0:
+        return 1
+    else:
+        return -1
+def madaline(input,target,lr,epoch):
+    #adaine weights and bias
+    weight=np.random.random((input.shape[1],input.shape[1]))
+    bias=np.random.random(input.shape[1])
+    w=np.array([0.5 for i in range(weight.shape[1])])#fixed weights and bias
+    b=0.5
+    k=0
+    while k<epoch:
+        error=[]
+        z_input=np.zeros(bias.shape[0])
+        z=np.zeros(bias.shape[0])
+        for i in range(input.shape[0]):
+            for j in range(input.shape[1]):
+                z_input[j]=sum(weight[j]*input[i])+bias[j]
+                z[j]=activation(z_input[j])
+            y_input=sum(z*w)+b
+            y=activation(y_input)
+            if y!=target[i]:
+                 for j in range(input.shape[1]):
+                     weight[j]+=lr*(target[i]-z_input[j])*input[i][j]
+                     bias=bias+lr*(target[i]-z_input[j])
+            error.append((target[i]-z_input[j])**2)
+        k+=1
+    return weight,bias
+x = np.array([[1.0, 1.0],
+			[1.0, -1.0],
+			[-1.0, 1.0],
+			[-1.0, -1.0]])
+t=np.array([1,1,1,-1])
+w,b=madaline(x,t,0.1,3)
+print("weight:",w)
+print("bias:",b)
